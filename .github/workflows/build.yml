@@ -10,16 +10,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Descomprimir
+        run: unzip -q BongBongScreenFilter.zip
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+          build-root-directory: screenfilter
+
       - name: Build debug APK
+        working-directory: screenfilter
         run: gradle assembleDebug --no-daemon
+
       - uses: actions/upload-artifact@v4
         with:
           name: BongBongScreenFilter-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: screenfilter/app/build/outputs/apk/debug/*.apk
